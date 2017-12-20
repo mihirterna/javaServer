@@ -47,15 +47,17 @@ public class Faded {
         if(file.isFile()){
             System.out.println(file.getName()+" is a file.");
             dos.writeUTF("file");
-            byte[] dataByte = new byte[32 * 1024];
+            int BUF_SIZE = 32768;
+            byte[] dataByte = new byte[BUF_SIZE];
             // byte[] bytes = Files.readAllBytes(Paths.get(file.getAbsolutePath()));
-            BufferedInputStream bufferData = new BufferedInputStream(new FileInputStream(new File(file.getAbsolutePath())));
-            BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(socket.getOutputStream());
+            BufferedInputStream bufferData = new BufferedInputStream(new FileInputStream(new File(file.getAbsolutePath())),BUF_SIZE);
+            BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(socket.getOutputStream(),BUF_SIZE);
             //dos.writeInt(bytes.length);
             dos.writeUTF(file.getName());
             int count;
-            while ((count = bufferData.read(dataByte))>0){
+            while ((count = bufferData.read(dataByte,0,BUF_SIZE))>0){
                 bufferedOutputStream.write(dataByte,0,count);
+                bufferedOutputStream.flush();
             }
             bufferData.close();
             bufferedOutputStream.close();
