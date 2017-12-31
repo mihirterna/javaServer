@@ -13,9 +13,8 @@ public class TaskServ {
             socket=serverSocket.accept();
             DataInputStream dis = new DataInputStream(socket.getInputStream());
             DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
-           // System.out.println(dis.readUTF());
-            Faded faded = new Faded(dis,dos,socket);
-            faded.main(null);
+            Runnable connectionHandler = new Faded(dis,dos,socket);
+            new Thread(connectionHandler).start();
 
         }
 
